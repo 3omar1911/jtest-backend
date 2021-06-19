@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\ExceptionsHandlers\ApiGeneralExceptionHandler', function ($app) {
+            return new \App\ExceptionsHandlers\JsonApiGeneralExceptionHandlerContract();
+        });
     }
 
     /**
