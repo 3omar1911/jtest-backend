@@ -230,4 +230,5 @@ return [
 
     ],
 
+    'customer_request_limit' => env("CUSTOMER_REQUEST_LIMIT", 10),
 ];

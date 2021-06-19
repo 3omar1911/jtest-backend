@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\CustomerFilter\CustomerFilterContract;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -16,10 +17,19 @@ class Customer extends Model
      * given an array of filters return a list of customers
      *
      * @param array $filters
-     * @return mixed
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public static function filter(array $filters = [])
+    public static function filter(CustomerFilterContract $filter, array $filters = [], $paginationData = [])
     {
-        // TODO::implement a filteration class to build the query responsible for filtering the customers then return the result
+        $builder = $filter->build($filters);
+        
+        if(! $paginationData) {
+            return $builder->get(); // in case of no filters applied all the data should be returned
+        }
+
+        return $builder
+            ->offet($paginationData['offset'])
+            ->limit($paginationData['limit'])
+            ->get();
     }
 }
