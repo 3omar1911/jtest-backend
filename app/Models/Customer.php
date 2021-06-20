@@ -9,6 +9,7 @@ class Customer extends Model
 {
     protected $guarded = [];
     protected $table = 'customer';
+    public $timestamps = false;
 
     /**
      * given an array of filters return a list of customers
