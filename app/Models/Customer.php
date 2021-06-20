@@ -40,9 +40,9 @@ class Customer extends Model
     /**
      * get the country parameters from the customer's phone number
      *
-     * @return array
+     * @return array|null
      */
-    public function country(): array
+    public function country()
     {
         $found = preg_match("/\(([0-9]+?)\)/", $this->phone, $result);
         
@@ -56,13 +56,18 @@ class Customer extends Model
         ];
     }
 
-    public function numberWithoutCountryCode(): string
+    /**
+     * get the user phone number without the contry code
+     *
+     * @return string|null
+     */
+    public function numberWithoutCountryCode()
     {
         $params = explode(') ', $this->phone);
         if(count($params) < 2) {
             return null;
         }
 
-        return $params[1];
+        return trim($params[1]);
     }
 }
