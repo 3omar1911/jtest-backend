@@ -14,6 +14,7 @@ class CustomerCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $collection = collect(parent::toArray($request));
+        return $collection->sortBy('country_name')->toArray();
     }
 }

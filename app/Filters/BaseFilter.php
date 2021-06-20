@@ -22,5 +22,7 @@ abstract class BaseFilter
                 $this->model = $this->$methodName($this->model, $value);
             }
         }
+
+        return $this->model;
     }
 }

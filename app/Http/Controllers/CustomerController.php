@@ -14,11 +14,13 @@ class CustomerController extends Controller
 {
     private $apiGeneralExceptionHandler;
     private $apiValidationExceptionHandler;
+    private $customerModel;
 
-    public function __construct(ApiGeneralExceptionHandlerContract $apiGeneralExceptionHandler, ApiValidationExceptionHandlerContract $apiValidationExceptionHandler)
+    public function __construct(ApiGeneralExceptionHandlerContract $apiGeneralExceptionHandler, ApiValidationExceptionHandlerContract $apiValidationExceptionHandler, Customer $customerModel)
     {
         $this->apiGeneralExceptionHandler = $apiGeneralExceptionHandler;
         $this->apiValidationExceptionHandler = $apiValidationExceptionHandler;
+        $this->customerModel = $customerModel;
     }
 
     /**
@@ -31,7 +33,7 @@ class CustomerController extends Controller
     {
         try {
             $this->validate($request, ['page' => 'integer']);
-            $customers = Customer::filter(resolve('App\Filters\CustomerFilter\CustomerFilterContract'), $request->all(), [
+            $customers = $this->customerModel->filter(resolve('App\Filters\CustomerFilter\CustomerFilterContract'), $request->all(), [
                 'offset' => $request->page? $request->page * config('app.customer_request_limit'): 0,
                 'limit' => config('app.customer_request_limit'),
             ]);
@@ -42,7 +44,7 @@ class CustomerController extends Controller
 
             return new CustomerCollection($customers);
         } catch(ValidationException $e) {
-            return $this->api;
+            return $this->apiValidationExceptionHandler->handle($e);
         } catch(Exception $e) {
             return $this->apiGeneralExceptionHandler->handle($e, 500);
         }

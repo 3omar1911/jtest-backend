@@ -14,6 +14,14 @@ class Customer extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $country = $this->country();
+
+        return [
+            'id' => $this->id,
+            'is_valid' => $this->isValid(),
+            'country_code' => $country['code'],
+            'country_name' => $country['name'],
+            'phone_number' => $this->numberWithoutCountryCode(),
+        ];
     }
 }
