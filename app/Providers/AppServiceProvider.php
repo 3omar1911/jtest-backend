@@ -25,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Filters\CustomerFilter\CustomerFilterContract', function ($app) {
             return new \App\Filters\CustomerFilter\SqliteCustomerFilter(new Customer());
         });
+
+        $this->app->bind('App\Services\QueryResultsFilters\Customer\CustomerQueryResultsFilterContract', function ($app) {
+            return new \App\Services\QueryResultsFilters\Customer\CustomerFilter();
+        });
     }
 
     /**

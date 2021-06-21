@@ -33,10 +33,11 @@ class CustomerController extends Controller
     {
         try {
             $this->validate($request, ['page' => 'integer']);
-            $customers = $this->customerModel->filter(resolve('App\Filters\CustomerFilter\CustomerFilterContract'), $request->all(), [
-                'offset' => $request->page? $request->page * config('app.customer_request_limit'): 0,
-                'limit' => config('app.customer_request_limit'),
-            ]);
+            $customers = $this->customerModel->filter(
+                resolve('App\Filters\CustomerFilter\CustomerFilterContract'), 
+                resolve('App\Services\QueryResultsFilters\Customer\CustomerQueryResultsFilterContract'), 
+                $request->all()
+            );
 
             if($customers->isEmpty()) {
                 return response(null, 204);

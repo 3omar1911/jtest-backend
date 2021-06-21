@@ -7,4 +7,3 @@
 
 ## before running the tests, you need to run
 1. php artisan config:clear
-2. create an empty file to be used for database testing in the database directory and lets call it test.sqlite

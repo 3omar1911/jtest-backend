@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Filters\CustomerFilter\CustomerFilterContract;
+use App\Services\QueryResultsFilters\Customer\CustomerQueryResultsFilterContract;
+use App\Services\QueryResultsFilters\QueryResultsFiltersContract;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -17,10 +19,16 @@ class Customer extends Model
      * @param array $filters
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function filter(CustomerFilterContract $filter, array $filters = [])
+    public function filter(CustomerFilterContract $filter, CustomerQueryResultsFilterContract $postDBFilter, array $filters = [])
     {
         $builder = $filter->build($filters);
-        return $builder->get(); // in case of no filters applied all the data should be returned
+        $queryResults = $builder->get(); // in case of no filters applied all the data should be returned
+        if($queryResults->isEmpty()) {
+            return $queryResults;
+        }
+
+        $postDBFilter->setResults($queryResults);
+        return $postDBFilter->apply($filters);
     }
 
     /**

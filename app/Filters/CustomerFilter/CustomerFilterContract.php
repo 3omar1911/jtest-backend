@@ -6,6 +6,4 @@ interface CustomerFilterContract
 {
     public function build(array $filters);
     public function countryCode($queryBuilder, $countryCode);
-    public function stateValid($queryBuilder, $countryCode);
-    public function stateInValid($queryBuilder, $countryCode);
 }
