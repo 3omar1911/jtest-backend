@@ -1990,19 +1990,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['customers'],
   data: function data() {
     return {
       page: 1,
       totalPages: 1,
-      customersPerPage: 10,
+      customersPerPage: 5,
       pageCustomers: []
     };
   },
   methods: {
     updatePage: function updatePage(pageNumber) {
-      this.pageCustomers = this.customers.slice(pageNumber - 1, pageNumber * this.customersPerPage);
+      this.page = pageNumber;
+      this.pageCustomers = this.customers.slice((pageNumber - 1) * this.customersPerPage, pageNumber * this.customersPerPage);
     }
   },
   watch: {
@@ -38072,7 +38077,41 @@ var render = function() {
             )
           : _vm._e()
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-footer", staticStyle: { "text-align": "right" } },
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { disabled: _vm.page == 1 },
+            on: {
+              click: function($event) {
+                return _vm.updatePage(_vm.page - 1)
+              }
+            }
+          },
+          [_vm._v("Previous")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { disabled: _vm.page == _vm.totalPages },
+            on: {
+              click: function($event) {
+                return _vm.updatePage(_vm.page + 1)
+              }
+            }
+          },
+          [_vm._v("Next")]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [

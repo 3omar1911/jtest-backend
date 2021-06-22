@@ -27,6 +27,10 @@
                 </tbody>
             </table>
         </div>
+        <div class="card-footer" style="text-align: right;">
+            <button class="btn btn-primary" :disabled="page == 1" @click="updatePage(page - 1)">Previous</button>
+            <button class="btn btn-primary" :disabled="page == totalPages" @click="updatePage(page + 1)">Next</button>
+        </div>
     </div>
 </template>
 
@@ -38,14 +42,15 @@ export default {
         return {
             page: 1,
             totalPages: 1,
-            customersPerPage: 10,
+            customersPerPage: 5,
             pageCustomers: [],
         }
     },
 
     methods: {
         updatePage(pageNumber) {
-            this.pageCustomers = this.customers.slice(pageNumber - 1, pageNumber * this.customersPerPage);
+            this.page = pageNumber;
+            this.pageCustomers = this.customers.slice((pageNumber - 1) * this.customersPerPage, pageNumber * this.customersPerPage);
         }
     },
 
