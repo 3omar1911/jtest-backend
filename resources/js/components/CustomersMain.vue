@@ -1,57 +1,48 @@
 <template>
     <div class="mt-5">
-        <Filters></Filters>
+        <Filters @filtersUpdated="applyFilters"></Filters>
+        <List :customers="customers"></List>
     </div>
 </template>
 
 <script>
+
 import Filters from './Customers/Filters.vue';
+import List from './Customers/List.vue';
 
 export default {
     components: {
-        Filters
+        Filters,
+        List,
     },
     data() {
         return {
-            countries: [
-                {
-                    value: null,
-                    text: 'all'
-                },                
-            ],
-            states: [
-                {
-                    value: null,
-                    text: 'all'
-                },
-                {
-                    value: "valid",
-                    text: "validate phone numbers"
-                },
-                {
-                    value: "invalid",
-                    text: "invalidate phone numbers"                    
-                },
-            ],
-
-            page: 1,
-            totalPages: 1,
             customers: [],
-            pageCustomers: [],
         }
     },
 
     mounted() {
-        this.fetchCountries();
         this.fetchCustomers();
     },
 
     methods: {
-        fetchCountries() {
+        fetchCustomers(filters = {}) {
+            this.axios 
+                .get('api/customers', {
+                    params: filters,
+                })
+                .then( response => {
+                    if(response.status == 204) {
+                        this.customers = [];
+                        return;
+                    }
+
+                    this.customers = response.data.data;
+                } );
         },
 
-        fetchCustomers() {
-
+        applyFilters(filters) {
+            this.fetchCustomers(filters);
         }
     }
 }

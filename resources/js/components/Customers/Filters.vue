@@ -2,12 +2,12 @@
     <div class="card">
         <div class="card-header">Filters</div>
         <div class="card-body">
-            <select name="country" id="select-country">
-                <option v-for="(country, index) in countries" :key="'filter_country' + index" :value="country.value" @select="updateFilters('country', country)">{{ country.text }}</option>
+            <select name="country" id="select-country" v-model="country">
+                <option v-for="(countryOption, index) in countries" :key="'filter_country' + index" :value="countryOption.value">{{ countryOption.text }}</option>
             </select>
 
-            <select name="state" id="select-state" class="ml-2">
-                <option v-for="(state, index) in states" :key="'filter_state' + index" :value="state.value" @select="updateFilters('state', state)">{{ state.text }}</option>
+            <select name="state" id="select-state" class="ml-2" v-model="state">
+                <option v-for="(stateOption, index) in states" :key="'filter_state' + index" :value="stateOption.value">{{ stateOption.text }}</option>
             </select>
         </div>
     </div>
@@ -39,9 +39,10 @@ export default {
             ],
 
             appliedFilters: {
-                country: null,
-                state: null,
             },
+
+            country: null,
+            state: null,
         }
     },
 
@@ -50,10 +51,6 @@ export default {
     },
 
     methods: {
-        updateFilters(filter, value) {
-            this.appliedFilters[filter] = value;
-        },
-
         fetchCountries() {
             this.axios 
                 .get('api/countries')
@@ -69,22 +66,28 @@ export default {
                     text: responseCountries[isoCode],
                 });
             }
-        }
+        },
+
+        updateFilters(filter, value) {
+            if(value === null) {
+                delete this.appliedFilters[filter];
+                this.$emit('filtersUpdated', this.appliedFilters);
+                return;
+            }
+
+            this.appliedFilters[filter] = value;
+            this.$emit('filtersUpdated', this.appliedFilters);
+        },
     },
 
     watch: {
-        appliedFilters(newFilters) {
-            let valuedFilters = {};
-            for(prop in newFilters) {
-                if(newFilters[prop] === null) {
-                    continue;
-                }
-
-                valuedFilters[prop] = newFilters[prop];
-            }
-
-            this.$emit('filtersChanged', valuedFilters);
+        country(newCountry) {
+            this.updateFilters('country_code', newCountry);
         },
+
+        state(newState) {
+            this.updateFilters('state', newState);
+        }
     }
 }
 </script>
