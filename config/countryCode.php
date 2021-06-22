@@ -180,7 +180,6 @@ return [
    "685" => "Samoa",
    "378" => "San Marino",
    "239" => "Sao Tome and Principe",
-   "" => "United States Minor Outlying Islands",
    "966" => "Saudi Arabia",
    "221" => "Senegal",
    "381" => "Serbia",
